@@ -1,0 +1,39 @@
+name: AgentTier auto-fix
+
+# Label an issue with "agent-go" to dispatch an AgentTier sandbox that runs
+# Claude Code against the issue and opens a pull request with the fix.
+on:
+  issues:
+    types: [labeled]
+
+# Don't run two fixes for the same issue at once; a newer dispatch wins.
+concurrency:
+  group: agent-fix-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  fix:
+    # Only fire for the agent-go label.
+    if: github.event.label.name == 'agent-go'
+    runs-on: [self-hosted, agenttier]
+    timeout-minutes: 15
+    steps:
+      - name: Checkout (for the agent scripts)
+        uses: actions/checkout@v4
+
+      - name: Dispatch AgentTier fix sandbox
+        env:
+          ROUTER_URL: http://agenttier-router.agenttier.svc.cluster.local:8080
+          REPO: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          chmod +x .github/agent/run.sh .github/agent/agent-fix.sh
+          .github/agent/run.sh
