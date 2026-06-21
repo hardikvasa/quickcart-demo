@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QuickCart</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>QuickCart</h1>
+    <span class="tagline">a tiny demo store</span>
+  </header>
+
+  <main class="layout">
+    <section class="catalog">
+      <h2>Products</h2>
+      <ul id="product-list" class="product-list"></ul>
+    </section>
+
+    <aside class="cart">
+      <h2>Your Cart</h2>
+      <ul id="cart-list" class="cart-list"></ul>
+      <div class="cart-summary">
+        <span class="summary-label">Total</span>
+        <span id="cart-total" data-testid="cart-total" class="summary-total">$0.00</span>
+      </div>
+      <button id="checkout" class="checkout-btn">Checkout</button>
+    </aside>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
